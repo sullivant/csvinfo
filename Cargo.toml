@@ -1,0 +1,8 @@
+[package]
+name = "csv_fields"
+version = "0.1.0"
+authors = ["Thomas Sullivan <thomas.l.sullivan@vumc.org>"]
+edition = "2018"
+
+[dependencies]
+csv = "1"
