@@ -1,8 +1,8 @@
+extern crate clap;
 extern crate csv;
 
-use std::env;
+use clap::{App, Arg};
 use std::error::Error;
-use std::ffi::OsString;
 use std::process;
 
 fn main() {
@@ -13,10 +13,33 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<Error>> {
-    let file_path = get_first_arg()?;
+    let matches = App::new("CSV Utils")
+        .version("0.0.2")
+        .author("Thomas Sullivan <sullivan.t@gmail.com>")
+        .about("Shows some info on CSV files.")
+        .arg(
+            Arg::with_name("file")
+                .short("f")
+                .help("Sets the input file to use")
+                .required(true)
+                .index(1),
+        )
+        .arg(
+            Arg::with_name("delim")
+                .short("d")
+                .long("delim")
+                .help("Sets the field delimiter to use, default is ','")
+                .required(false)
+                .takes_value(true),
+        )
+        .get_matches();
+
+    let file_path = matches.value_of("file").unwrap();
+    let delim: u8 = *matches.value_of("delim").unwrap_or(",").as_bytes().first().unwrap_or(&b',');
+
     let mut rdr = csv::ReaderBuilder::new()
         .has_headers(false)
-        .delimiter(b'\t')
+        .delimiter(delim)
         .flexible(true)
         .from_path(file_path)?;
 
@@ -50,11 +73,4 @@ fn run() -> Result<(), Box<Error>> {
     }
 
     Ok(())
-}
-
-fn get_first_arg() -> Result<OsString, Box<Error>> {
-    match env::args_os().nth(1) {
-        None => Err(From::from("Expected filename as argument, but got none.")),
-        Some(file_path) => Ok(file_path),
-    }
 }
