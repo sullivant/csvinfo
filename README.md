@@ -21,6 +21,11 @@ OPTIONS:
 
 ARGS:
     <file>    Sets the input file to use
+
+$ csv_utils sample.csv
+Field: 1 = 6
+Field: 2 = 3
+Field: 3 = 9
 ```
 
 ### TODO
