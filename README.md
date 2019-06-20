@@ -31,4 +31,11 @@ Field: 3 = 9
 ### TODO
 - [X] Use the crate "clap" as a way to pass CLI parameters
 - [ ] Allow for any single char passed as parameter
+- [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
+```
+Fields with <= 25 chars: 1,2,4,5
+Fields with > 25 chars: 3,6
+Fields that are giant: 7
+```
+- [ ] Display info about the field contents - which are always numeric?  Which have no emptys?  
 
