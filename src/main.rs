@@ -35,7 +35,12 @@ fn run() -> Result<(), Box<Error>> {
         .get_matches();
 
     let file_path = matches.value_of("file").unwrap();
-    let delim: u8 = *matches.value_of("delim").unwrap_or(",").as_bytes().first().unwrap_or(&b',');
+    let delim: u8 = *matches
+        .value_of("delim")
+        .unwrap_or(",")
+        .as_bytes()
+        .first()
+        .unwrap_or(&b',');
 
     let mut rdr = csv::ReaderBuilder::new()
         .has_headers(false)
