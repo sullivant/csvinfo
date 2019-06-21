@@ -14,7 +14,7 @@ fn main() {
 
 fn run() -> Result<(), Box<Error>> {
     let matches = App::new("CSV Utils")
-        .version("0.0.2")
+        .version("0.1.0")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
         .arg(
@@ -32,6 +32,12 @@ fn run() -> Result<(), Box<Error>> {
                 .required(false)
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("skip")
+                .short("s")
+                .long("skip")
+                .help("When used, skips the first record (header)"),
+        )
         .get_matches();
 
     let file_path = matches.value_of("file").unwrap();
@@ -42,8 +48,14 @@ fn run() -> Result<(), Box<Error>> {
         .first()
         .unwrap_or(&b',');
 
+    let mut skip_header: bool = false;
+    if matches.is_present("skip") {
+        println!("Skipping header record in file.");
+        skip_header = true;
+    }
+
     let mut rdr = csv::ReaderBuilder::new()
-        .has_headers(false)
+        .has_headers(skip_header)
         .delimiter(delim)
         .flexible(true)
         .from_path(file_path)?;
