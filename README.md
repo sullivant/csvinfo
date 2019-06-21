@@ -4,7 +4,7 @@ A small utility to display some metadata about the fields available in a "csv" (
 
 ### Usage
 ```bash
-$ csv_utils --help
+$ ./csv_utils --help
 CSV Utils 0.1.0
 Thomas Sullivan <sullivan.t@gmail.com>
 Shows some info on CSV files.
@@ -24,7 +24,7 @@ OPTIONS:
 ARGS:
     <file>    Sets the input file to use
 
-$ csv_utils sample.csv
+$ ./csv_utils sample.csv
 Field: 1 = 6
 Field: 2 = 3
 Field: 3 = 9
