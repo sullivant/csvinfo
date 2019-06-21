@@ -1,3 +1,4 @@
+#[macro_use]
 extern crate clap;
 extern crate csv;
 
@@ -38,8 +39,16 @@ fn run() -> Result<(), Box<Error>> {
                 .long("skip")
                 .help("When used, skips the first record (header)"),
         )
+        .arg(
+            Arg::with_name("max_records")
+                .long("max")
+                .short("m")
+                .help("When provided, will stop gathering data after N records")
+                .takes_value(true),
+        )
         .get_matches();
 
+    // Find the file path as passed
     let file_path = matches.value_of("file").unwrap();
     let delim: u8 = *matches
         .value_of("delim")
@@ -48,12 +57,23 @@ fn run() -> Result<(), Box<Error>> {
         .first()
         .unwrap_or(&b',');
 
+    // Determine if we need to skip the header record
     let mut skip_header: bool = false;
     if matches.is_present("skip") {
         println!("Skipping header record in file.");
         skip_header = true;
     }
 
+    // Determine if we need to stop processing records after a certain
+    // provided count
+    let mut stop_after: bool = false;
+    let stop_count = value_t!(matches, "max", u64).unwrap_or(100);
+    if matches.is_present("max") {
+        println!("Stopping after {} records", stop_count);
+        stop_after = true;
+    }
+
+    // Build the CSV reader we will use
     let mut rdr = csv::ReaderBuilder::new()
         .has_headers(skip_header)
         .delimiter(delim)
@@ -61,9 +81,11 @@ fn run() -> Result<(), Box<Error>> {
         .from_path(file_path)?;
 
     let mut rec_lengths: Vec<(i32, i32)> = Vec::new();
+    let mut rec_count: u64 = 0;
 
     for result in rdr.records() {
         let record = result?;
+        rec_count = rec_count + 1;
 
         let mut i: i32 = 0;
         for field in record.iter() {
@@ -83,11 +105,16 @@ fn run() -> Result<(), Box<Error>> {
 
             i = i + 1;
         }
+        if stop_after && rec_count == stop_count {
+            println!("Hit record stop count.");
+            break;
+        }
     }
 
     for rec_tup in rec_lengths.iter() {
         println!("Field: {} = {}", rec_tup.0 + 1, rec_tup.1);
     }
+    println!("Total records in file: {}", rec_count);
 
     Ok(())
 }

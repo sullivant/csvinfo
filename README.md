@@ -5,19 +5,21 @@ A small utility to display some metadata about the fields available in a "csv" (
 ### Usage
 ```bash
 $ csv_utils --help
-CSV Utils 0.0.2
+CSV Utils 0.1.0
 Thomas Sullivan <sullivan.t@gmail.com>
 Shows some info on CSV files.
 
 USAGE:
-    csv_fields [OPTIONS] <file>
+    csv_fields [FLAGS] [OPTIONS] <file>
 
 FLAGS:
     -h, --help       Prints help information
+    -s, --skip       When used, skips the first record (header)
     -V, --version    Prints version information
 
 OPTIONS:
-    -d, --delim <delim>    Sets the field delimiter to use, default is ','
+    -d, --delim <delim>        Sets the field delimiter to use, default is ','
+    -m, --max <max_records>    When provided, will stop gathering data after N records
 
 ARGS:
     <file>    Sets the input file to use
