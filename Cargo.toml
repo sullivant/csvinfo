@@ -1,5 +1,5 @@
 [package]
-name = "csv_fields"
+name = "csv_utils"
 version = "0.1.0"
 authors = ["Thomas Sullivan <thomas.l.sullivan@vumc.org>"]
 edition = "2018"
