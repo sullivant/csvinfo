@@ -50,12 +50,14 @@ fn run() -> Result<(), Box<Error>> {
 
     // Find the file path as passed
     let file_path = matches.value_of("file").unwrap();
-    let delim: u8 = *matches
-        .value_of("delim")
-        .unwrap_or(",")
-        .as_bytes()
-        .first()
-        .unwrap_or(&b',');
+    //let delim: u8 = *matches
+    //.value_of("delim")
+    //.unwrap_or(",")
+    //.as_bytes()
+    //.first()
+    //.unwrap_or(&b',');
+    let delim: char = matches.value_of("delim").unwrap_or(",").parse()?;
+    println!("Using delim of: {}", delim);
 
     // Determine if we need to skip the header record
     let mut skip_header: bool = false;
@@ -76,7 +78,7 @@ fn run() -> Result<(), Box<Error>> {
     // Build the CSV reader we will use
     let mut rdr = csv::ReaderBuilder::new()
         .has_headers(skip_header)
-        .delimiter(delim)
+        .delimiter(delim as u8)
         .flexible(true)
         .from_path(file_path)?;
 
