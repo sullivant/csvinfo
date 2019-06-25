@@ -55,7 +55,6 @@ fn run() -> Result<(), Box<Error>> {
         "\\t" => '\t',
         s => s.parse()?,
     };
-    println!("Using delim of: {}", delim);
 
     // Determine if we need to skip the header record
     let mut skip_header: bool = false;
