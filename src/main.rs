@@ -15,7 +15,7 @@ fn main() {
 
 fn run() -> Result<(), Box<Error>> {
     let matches = App::new("CSV Utils")
-        .version("0.1.0")
+        .version("0.2.0")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
         .arg(
@@ -50,13 +50,11 @@ fn run() -> Result<(), Box<Error>> {
 
     // Find the file path as passed
     let file_path = matches.value_of("file").unwrap();
-    //let delim: u8 = *matches
-    //.value_of("delim")
-    //.unwrap_or(",")
-    //.as_bytes()
-    //.first()
-    //.unwrap_or(&b',');
-    let delim: char = matches.value_of("delim").unwrap_or(",").parse()?;
+
+    let delim: char = match matches.value_of("delim").unwrap_or(",") {
+        "\\t" => '\t',
+        s => s.parse()?,
+    };
     println!("Using delim of: {}", delim);
 
     // Determine if we need to skip the header record

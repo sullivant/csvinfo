@@ -5,12 +5,12 @@ A small utility to display some metadata about the fields available in a "csv" (
 ### Usage
 ```bash
 $ ./csv_utils --help
-CSV Utils 0.1.0
+CSV Utils 0.2.0
 Thomas Sullivan <sullivan.t@gmail.com>
 Shows some info on CSV files.
 
 USAGE:
-    csv_fields [FLAGS] [OPTIONS] <file>
+    csv_utils [FLAGS] [OPTIONS] <file>
 
 FLAGS:
     -h, --help       Prints help information
@@ -32,7 +32,7 @@ Field: 3 = 9
 
 ### TODO
 - [X] Use the crate "clap" as a way to pass CLI parameters
-- [ ] Allow for any single char passed as parameter
+- [X] Allow for any single char passed as parameter
 - [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
-- [ ] Display info about the field contents - which are always numeric?  Which have no emptys?  
+- [ ] Display info about the field contents - which are always numeric?  Which have no empty vals?  
 
