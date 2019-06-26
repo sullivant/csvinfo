@@ -36,3 +36,4 @@ Field: 3 = 9
 - [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
 - [ ] Display info about the field contents - which are always numeric?  Which have no empty vals?  
 - [ ] Allow for quoted values
+- [ ] Allow for field names to be gathered from header data instead of "field 1, field 2..."
