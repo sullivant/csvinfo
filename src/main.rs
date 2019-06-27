@@ -46,15 +46,29 @@ fn run() -> Result<(), Box<Error>> {
                 .help("When provided, will stop gathering data after N records")
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("quotes")
+                .short("q")
+                .long("quotes")
+                .help("When passed, data is quoted."),
+        )
         .get_matches();
 
     // Find the file path as passed
     let file_path = matches.value_of("file").unwrap();
 
+    // Determine the delimiter
     let delim: char = match matches.value_of("delim").unwrap_or(",") {
         "\\t" => '\t',
         s => s.parse()?,
     };
+
+    // Determine if values are quote separated
+    let mut quotes: bool = false;
+    if matches.is_present("quotes") {
+        println!("Data is quoted.");
+        quotes = true;
+    }
 
     // Determine if we need to skip the header record
     let mut skip_header: bool = false;
@@ -77,6 +91,7 @@ fn run() -> Result<(), Box<Error>> {
         .has_headers(skip_header)
         .delimiter(delim as u8)
         .flexible(true)
+        .quoting(quotes)
         .from_path(file_path)?;
 
     let mut rec_lengths: Vec<(i32, i32)> = Vec::new();

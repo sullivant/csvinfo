@@ -14,6 +14,7 @@ USAGE:
 
 FLAGS:
     -h, --help       Prints help information
+    -q, --quotes     When passed, data is quoted.
     -s, --skip       When used, skips the first record (header)
     -V, --version    Prints version information
 
@@ -23,11 +24,6 @@ OPTIONS:
 
 ARGS:
     <file>    Sets the input file to use
-
-$ ./csv_utils sample.csv
-Field: 1 = 6
-Field: 2 = 3
-Field: 3 = 9
 ```
 
 ### TODO
@@ -35,4 +31,4 @@ Field: 3 = 9
 - [X] Allow for any single char passed as parameter
 - [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
 - [ ] Display info about the field contents - which are always numeric?  Which have no empty vals?  
-- [ ] Allow for quoted values
+- [X] Allow for quoted values
