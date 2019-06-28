@@ -70,18 +70,20 @@ fn run() -> Result<(), Box<Error>> {
     };
 
     // Determine if values are quote separated
-    let mut quotes: bool = false;
-    if matches.is_present("quotes") {
+    let quotes = if matches.is_present("quotes") {
         println!("Data is quoted.");
-        quotes = true;
-    }
+        true
+    } else {
+        false
+    };
 
     // Determine if we need to skip the header record
-    let mut skip_header: bool = false;
-    if matches.is_present("skip") {
+    let skip_header = if matches.is_present("skip") {
         println!("Skipping header record in file.");
-        skip_header = true;
-    }
+        true
+    } else {
+        false
+    };
 
     // Determine if we need to stop processing records after a certain
     // provided count
@@ -107,7 +109,7 @@ fn run() -> Result<(), Box<Error>> {
 
     for result in rdr.records() {
         let record = result?;
-        rec_count = rec_count + 1;
+        rec_count += 1;
 
         let mut i: i32 = 0;
         for field in record.iter() {
@@ -129,7 +131,7 @@ fn run() -> Result<(), Box<Error>> {
                 }
             }
 
-            i = i + 1;
+            i += 1;
         }
         if stop_after && rec_count == stop_count {
             println!("Hit record stop count.");
