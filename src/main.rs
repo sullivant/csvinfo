@@ -6,6 +6,12 @@ use clap::{App, Arg};
 use std::error::Error;
 use std::process;
 
+struct Field {
+    pos: i32,
+    max_len: i32,
+    title: String,
+}
+
 fn main() {
     if let Err(err) = run() {
         println!("{}", err);
@@ -94,8 +100,10 @@ fn run() -> Result<(), Box<Error>> {
         .quoting(quotes)
         .from_path(file_path)?;
 
-    let mut rec_lengths: Vec<(i32, i32)> = Vec::new();
+    let mut rec_structs: Vec<Field> = Vec::new();
     let mut rec_count: u64 = 0;
+
+    let headers = rdr.headers()?.clone();
 
     for result in rdr.records() {
         let record = result?;
@@ -103,17 +111,21 @@ fn run() -> Result<(), Box<Error>> {
 
         let mut i: i32 = 0;
         for field in record.iter() {
-            let check_val: i32 = field.len() as i32;
+            let check_val: i32 = field.len() as i32; // The val we will use to determine new max
 
-            match rec_lengths.iter().position(|ref p| i <= p.0) {
+            match rec_structs.iter().position(|ref p| i <= p.pos) {
                 Some(_) => {
-                    let existing: i32 = rec_lengths.get(i as usize).unwrap().1;
+                    let existing: i32 = rec_structs.get(i as usize).unwrap().max_len;
                     if check_val > existing {
-                        rec_lengths[i as usize] = (i, check_val);
+                        rec_structs[i as usize].max_len = check_val;
                     }
                 }
                 None => {
-                    rec_lengths.push((i, field.len() as i32));
+                    rec_structs.push(Field {
+                        pos: i,
+                        max_len: check_val,
+                        title: headers.get(i as usize).unwrap_or("unk").to_string(),
+                    });
                 }
             }
 
@@ -125,10 +137,13 @@ fn run() -> Result<(), Box<Error>> {
         }
     }
 
-    for rec_tup in rec_lengths.iter() {
-        println!("Field: {} = {}", rec_tup.0 + 1, rec_tup.1);
+    println!("{} records in file.", rec_count);
+    for field in rec_structs.iter() {
+        println!(
+            "Field: {} ({}) len: {}",
+            field.pos, field.title, field.max_len
+        );
     }
-    println!("Total records in file: {}", rec_count);
 
     Ok(())
 }
