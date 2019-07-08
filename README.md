@@ -2,6 +2,8 @@
 
 A small utility to display some metadata about the fields available in a "csv" (or otherwise delimited) data file.  This came about because I got tired of trying to determine the field lengths in a source data file that was very large and also wanted to learn some Rust.
 
+[![Build Status](https://travis-ci.com/sullivant/csv_utils.svg?branch=master)](https://travis-ci.com/sullivant/csv_utils)
+
 ### Reminder
 
 This is just here while I tinker with some "applied" learning of Rust - don't trust it to do what it says on the tin.
