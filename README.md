@@ -43,13 +43,14 @@ Field	Max	Types % (i, f, c)			Title
 5	10	(0.0000, 0.0000, 100.0000)		START_DATE
 ```
 
-### TODO
+### General TODO
 - [X] Use the crate "clap" as a way to pass CLI parameters
 - [X] Allow for any single char passed as parameter
 - [X] Allow for quoted values
 - [X] Allow for field names to be gathered from header data instead of "field 1, field 2..."
 - [ ] Test cases
-- [ ] Prettier looking CLI output
+- [X] Prettier looking CLI output
+- [ ] Status bar on CLI while waiting/processing
 ###  Content of the fields
 - [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
 - [X] Which are always numeric?

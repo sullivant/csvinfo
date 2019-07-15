@@ -1,10 +1,12 @@
 #[macro_use]
 extern crate clap;
 extern crate csv;
+extern crate tabular;
 
 use clap::{App, Arg};
 use std::error::Error;
 use std::process;
+use tabular::{Row, Table};
 
 // Struct and the impl hold the necessary info about the fields
 struct Field {
@@ -14,26 +16,15 @@ struct Field {
     types: (i32, i32, i32), // int, float, char
 }
 impl Field {
-    // Just a returns a pretty string for output purposes
-    pub fn to_string(&self) -> String {
-        format!(
-            "{}\t{}\t({})\t\t{}",
-            self.pos + 1,
-            self.max_len,
-            self.profile(),
-            self.title,
-        )
-    }
-
-    // Returns a profile in % based on the types tuple
-    pub fn profile(&self) -> String {
-        let sum: f64 = (self.types.0 + self.types.1 + self.types.2) as f64;
-        format!(
-            "{:.4}, {:.4}, {:.4}",
-            (self.types.0 as f64 / sum) * 100.0,
-            (self.types.1 as f64 / sum) * 100.0,
-            (self.types.2 as f64 / sum) * 100.0
-        )
+    // Returns a profile tuple in % based on the types tuple
+    pub fn build_profile(&self) -> (f64, f64, f64) {
+        let sum: f64 = f64::from(self.types.0 + self.types.1 + self.types.2);
+        let t: (f64, f64, f64) = (
+            (f64::from(self.types.0) / sum) * 100.0,
+            (f64::from(self.types.1) / sum) * 100.0,
+            (f64::from(self.types.2) / sum) * 100.0,
+        );
+        return t;
     }
 }
 
@@ -195,10 +186,33 @@ fn run() -> Result<(), Box<Error>> {
     }
 
     println!("{} records in file ({} delim).", record_count, delim);
-    println!("{}", output_header());
+
+    let mut table = Table::new("{:<}  {:<}  ({:^} {:^} {:^})  {:>}");
+
+    table.add_row(
+        Row::new()
+            .with_cell("Field")
+            .with_cell("Max Len")
+            .with_cell("%int")
+            .with_cell("%float")
+            .with_cell("%char")
+            .with_cell("Title"),
+    );
     for field in record_data.iter() {
-        println!("{}", field.to_string());
+        // Build the type profile for this field, so we can use it easier and line the column up
+        let profile = field.build_profile();
+
+        table.add_row(
+            Row::new()
+                .with_cell(field.pos + 1)
+                .with_cell(field.max_len)
+                .with_cell(format!("{:8.4}", profile.0))
+                .with_cell(format!("{:8.4}", profile.1))
+                .with_cell(format!("{:8.4}", profile.2))
+                .with_cell(&field.title),
+        );
     }
+    print!("{}", table);
 
     Ok(())
 }

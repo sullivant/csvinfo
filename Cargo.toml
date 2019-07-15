@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 csv = "1"
 clap = "2.33.0"
+tabular = "0.1.2"
