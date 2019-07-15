@@ -38,6 +38,7 @@ ARGS:
 - [X] Allow for quoted values
 - [X] Allow for field names to be gathered from header data instead of "field 1, field 2..."
 - [ ] Test cases
+- [ ] Prettier looking CLI output
 ###  Content of the fields
 - [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
 - [X] Which are always numeric?
