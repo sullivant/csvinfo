@@ -19,8 +19,8 @@ fn main() {
     }
 }
 
-fn run() -> Result<(), Box<Error>> {
-    let matches = App::new("CSV Utils")
+fn get_parameters<'a>() -> clap::ArgMatches<'a> {
+    App::new("CSV Utils")
         .version("0.2.0")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
@@ -58,7 +58,12 @@ fn run() -> Result<(), Box<Error>> {
                 .long("quotes")
                 .help("When passed, data is quoted."),
         )
-        .get_matches();
+        .get_matches()
+}
+
+fn run() -> Result<(), Box<Error>> {
+    // Contains the parameters passed to the application
+    let matches = get_parameters();
 
     // Find the file path as passed
     let file_path = matches.value_of("file").unwrap();
@@ -113,7 +118,7 @@ fn run() -> Result<(), Box<Error>> {
 
         let mut i: i32 = 0;
         for field in record.iter() {
-            let check_val: i32 = field.len() as i32; // The val we will use to determine new max
+            let check_val: i32 = field.trim().len() as i32; // The val we will use to determine new max
 
             match rec_structs.iter().position(|ref p| i <= p.pos) {
                 Some(_) => {
@@ -126,7 +131,7 @@ fn run() -> Result<(), Box<Error>> {
                     rec_structs.push(Field {
                         pos: i,
                         max_len: check_val,
-                        title: headers.get(i as usize).unwrap_or("unk").to_string(),
+                        title: headers.get(i as usize).unwrap_or("unk").trim().to_string(),
                     });
                 }
             }
