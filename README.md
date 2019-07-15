@@ -35,12 +35,12 @@ ARGS:
 ```bash
 $ ./csv_utils ../tmp/file_of_data.csv -d'|'
 175646 records in file (| delim).
-Field	Max	Types % (i, f, c)			Title
-1	9	(99.9994, 0.0000, 0.0006)		PK_ID
-2	9	(99.9994, 0.0000, 0.0006)		EMPLOYEE
-3	9	(99.9994, 0.0000, 0.0006)		BADGE_ID
-4	9	(99.9989, 0.0000, 0.0011)		LOCATION
-5	10	(0.0000, 0.0000, 100.0000)		START_DATE
+Field  Max Len  (  %int    %float   %char  )       Title
+1      9        ( 99.9994   0.0000   0.0006)       PK_ID
+2      9        ( 99.9994   0.0000   0.0006)    EMPLOYEE
+3      9        ( 99.9994   0.0000   0.0006)    BADGE_ID
+4      9        ( 99.9989   0.0000   0.0011)    LOCATION
+5      10       (  0.0000   0.0000 100.0000)  START_DATE
 ```
 
 ### General TODO
