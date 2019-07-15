@@ -6,10 +6,40 @@ use clap::{App, Arg};
 use std::error::Error;
 use std::process;
 
+// Struct and the impl hold the necessary info about the fields
 struct Field {
     pos: i32,
     max_len: i32,
     title: String,
+    types: (i32, i32, i32), // int, float, char
+}
+impl Field {
+    // Just a returns a pretty string for output purposes
+    pub fn to_string(&self) -> String {
+        format!(
+            "{}\t{}\t({})\t\t{}",
+            self.pos + 1,
+            self.max_len,
+            self.profile(),
+            self.title,
+        )
+    }
+
+    // Returns a profile in % based on the types tuple
+    pub fn profile(&self) -> String {
+        let sum: f64 = (self.types.0 + self.types.1 + self.types.2) as f64;
+        format!(
+            "{:.4}, {:.4}, {:.4}",
+            (self.types.0 as f64 / sum) * 100.0,
+            (self.types.1 as f64 / sum) * 100.0,
+            (self.types.2 as f64 / sum) * 100.0
+        )
+    }
+}
+
+// Does what you think it does.
+pub fn output_header() -> String {
+    String::from("Field\tMax\tTypes % (i, f, c)\t\t\tTitle")
 }
 
 fn main() {
@@ -99,7 +129,7 @@ fn run() -> Result<(), Box<Error>> {
         stop_after = true;
     }
 
-    // Build the CSV reader we will use
+    // Build the CSV reader we will use with the supplied parameters
     let mut rdr = csv::ReaderBuilder::new()
         .has_headers(skip_header)
         .delimiter(delim as u8)
@@ -107,49 +137,67 @@ fn run() -> Result<(), Box<Error>> {
         .quoting(quotes)
         .from_path(file_path)?;
 
-    let mut rec_structs: Vec<Field> = Vec::new();
-    let mut rec_count: u64 = 0;
+    // Contains the detail about the records
+    let mut record_data: Vec<Field> = Vec::new();
+    let mut record_count: u64 = 0;
 
     let headers = rdr.headers()?.clone();
 
     for result in rdr.records() {
         let record = result?;
-        rec_count += 1;
+        record_count += 1;
 
+        // Walk through each record, and start to gather the data into the vector of field data
         let mut i: i32 = 0;
         for field in record.iter() {
             let check_val: i32 = field.trim().len() as i32; // The val we will use to determine new max
 
-            match rec_structs.iter().position(|ref p| i <= p.pos) {
+            // determine if this is an integer, or a float, or a char
+            let data_type = match field.trim().parse::<i32>() {
+                Ok(_) => (1, 0, 0),
+                Err(_) => match field.trim().parse::<f32>() {
+                    Ok(_) => (0, 1, 0),
+                    Err(_) => (0, 0, 1),
+                },
+            };
+
+            // Match to see if we already have this field in record_data, if we do, determine if
+            // the length found here is greater than the length we have already; if not, push new
+            // metadata onto record_data.
+            match record_data.iter().position(|ref p| i <= p.pos) {
                 Some(_) => {
-                    let existing: i32 = rec_structs.get(i as usize).unwrap().max_len;
+                    let existing: i32 = record_data.get(i as usize).unwrap().max_len;
                     if check_val > existing {
-                        rec_structs[i as usize].max_len = check_val;
+                        record_data[i as usize].max_len = check_val;
                     }
+
+                    // Update the info about data types
+                    record_data[i as usize].types.0 += data_type.0;
+                    record_data[i as usize].types.1 += data_type.1;
+                    record_data[i as usize].types.2 += data_type.2;
                 }
                 None => {
-                    rec_structs.push(Field {
+                    record_data.push(Field {
                         pos: i,
                         max_len: check_val,
                         title: headers.get(i as usize).unwrap_or("unk").trim().to_string(),
+                        types: data_type,
                     });
                 }
             }
 
             i += 1;
         }
-        if stop_after && rec_count == stop_count {
+        if stop_after && record_count == stop_count {
             println!("Hit record stop count.");
             break;
         }
     }
 
-    println!("{} records in file.", rec_count);
-    for field in rec_structs.iter() {
-        println!(
-            "Field: {} ({}) len: {}",
-            field.pos, field.title, field.max_len
-        );
+    println!("{} records in file ({} delim).", record_count, delim);
+    println!("{}", output_header());
+    for field in record_data.iter() {
+        println!("{}", field.to_string());
     }
 
     Ok(())
