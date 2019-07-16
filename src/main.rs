@@ -8,30 +8,7 @@ use std::error::Error;
 use std::process;
 use tabular::{Row, Table};
 
-// Struct and the impl hold the necessary info about the fields
-struct Field {
-    pos: i32,
-    max_len: i32,
-    title: String,
-    types: (i32, i32, i32), // int, float, char
-}
-impl Field {
-    // Returns a profile tuple in % based on the types tuple
-    pub fn build_profile(&self) -> (f64, f64, f64) {
-        let sum: f64 = f64::from(self.types.0 + self.types.1 + self.types.2);
-        let t: (f64, f64, f64) = (
-            (f64::from(self.types.0) / sum) * 100.0,
-            (f64::from(self.types.1) / sum) * 100.0,
-            (f64::from(self.types.2) / sum) * 100.0,
-        );
-        return t;
-    }
-}
-
-// Does what you think it does.
-pub fn output_header() -> String {
-    String::from("Field\tMax\tTypes % (i, f, c)\t\t\tTitle")
-}
+use csv_lib::Field;
 
 fn main() {
     if let Err(err) = run() {
@@ -42,7 +19,7 @@ fn main() {
 
 fn get_parameters<'a>() -> clap::ArgMatches<'a> {
     App::new("CSV Utils")
-        .version("0.2.0")
+        .version("0.3.0")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
         .arg(

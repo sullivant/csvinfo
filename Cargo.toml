@@ -1,10 +1,19 @@
 [package]
 name = "csv_utils"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Thomas Sullivan <thomas.l.sullivan@vumc.org>"]
 edition = "2018"
+
+[lib]
+name = "csv_lib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "csv_utils"
+path = "src/main.rs"
 
 [dependencies]
 csv = "1"
 clap = "2.33.0"
 tabular = "0.1.2"
+
