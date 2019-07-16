@@ -25,7 +25,7 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-    -d, --delim <delim>        Sets the field delimiter to use, default is ','
+    -d, --delim <delim>        Sets the field delimiter to use (example: -d '|'), default is ','
     -m, --max <max_records>    When provided, will stop gathering data after N records
 
 ARGS:

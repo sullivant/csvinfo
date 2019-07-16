@@ -11,7 +11,7 @@ use tabular::{Row, Table};
 use csv_lib::Field;
 
 fn main() {
-    if let Err(err) = run() {
+    if let Err(err) = run(&mut std::io::stdout()) {
         println!("{}", err);
         process::exit(1);
     }
@@ -33,7 +33,7 @@ fn get_parameters<'a>() -> clap::ArgMatches<'a> {
             Arg::with_name("delim")
                 .short("d")
                 .long("delim")
-                .help("Sets the field delimiter to use, default is ','")
+                .help("Sets the field delimiter to use (example: -d '|'), default is ','")
                 .required(false)
                 .takes_value(true),
         )
@@ -59,7 +59,7 @@ fn get_parameters<'a>() -> clap::ArgMatches<'a> {
         .get_matches()
 }
 
-fn run() -> Result<(), Box<Error>> {
+fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
     // Contains the parameters passed to the application
     let matches = get_parameters();
 
@@ -74,7 +74,7 @@ fn run() -> Result<(), Box<Error>> {
 
     // Determine if values are quote separated
     let quotes = if matches.is_present("quotes") {
-        println!("Data is quoted.");
+        writeln!(writer, "Data is quoted.").unwrap();
         true
     } else {
         false
@@ -82,7 +82,7 @@ fn run() -> Result<(), Box<Error>> {
 
     // Determine if we need to skip the header record
     let skip_header = if matches.is_present("skip") {
-        println!("Skipping header record in file.");
+        writeln!(writer, "Skipping header record in file.").unwrap();
         true
     } else {
         false
@@ -93,7 +93,7 @@ fn run() -> Result<(), Box<Error>> {
     let mut stop_after: bool = false;
     let stop_count = value_t!(matches, "max", u64).unwrap_or(100);
     if matches.is_present("max") {
-        println!("Stopping after {} records", stop_count);
+        writeln!(writer, "Stopping after {} records", stop_count).unwrap();
         stop_after = true;
     }
 
@@ -157,12 +157,17 @@ fn run() -> Result<(), Box<Error>> {
             i += 1;
         }
         if stop_after && record_count == stop_count {
-            println!("Hit record stop count.");
+            writeln!(writer, "Hit record stop count.").unwrap();
             break;
         }
     }
 
-    println!("{} records in file ({} delim).", record_count, delim);
+    writeln!(
+        writer,
+        "{} records in file ({} delim).",
+        record_count, delim
+    )
+    .unwrap();
 
     let mut table = Table::new("{:<}  {:<}  ({:^} {:^} {:^})  {:>}");
 
