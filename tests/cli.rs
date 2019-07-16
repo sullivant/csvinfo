@@ -11,7 +11,8 @@ fn file_doesnt_exist() -> Result<(), Box<std::error::Error>> {
     assert.failure();
 
     let predicate_fn = predicate::str::contains("No such file or directory");
-    cmd.assert().failure().stderr(predicate_fn);
+    cmd.assert().failure().stdout(predicate_fn);
+
     Ok(())
 }
 
