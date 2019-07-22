@@ -8,6 +8,8 @@ A small utility to display some metadata about the fields available in a "csv" (
 
 This is just here while I tinker with some "applied" learning of Rust - don't trust it to do what it says on the tin.
 
+You should really probably be using XSV: https://github.com/BurntSushi/xsv but, I am taking examples in idea from there and implementing them here because, again, this is a "hands on" place for me to do some learnin'.
+
 ### Usage
 ```bash
 $ ./csv_utils --help
