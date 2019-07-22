@@ -1,8 +1,8 @@
-## csv_utils
+## csvsinfo
 
 A small utility to display some metadata about the fields available in a "csv" (or otherwise delimited) data file.  This came about because I got tired of trying to determine the field lengths in a source data file that was very large and also wanted to learn some Rust.
 
-[![Build Status](https://travis-ci.com/sullivant/csv_utils.svg?branch=master)](https://travis-ci.com/sullivant/csv_utils)
+[![Build Status](https://travis-ci.com/sullivant/csvinfo.svg?branch=master)](https://travis-ci.com/sullivant/csvinfo)
 
 ### Reminder
 
@@ -12,13 +12,13 @@ You should really probably be using XSV: https://github.com/BurntSushi/xsv but, 
 
 ### Usage
 ```bash
-$ ./csv_utils --help
+$ ./csvinfo --help
 CSV Utils 0.2.0
 Thomas Sullivan <sullivan.t@gmail.com>
 Shows some info on CSV files.
 
 USAGE:
-    csv_utils [FLAGS] [OPTIONS] <file>
+    csvinfo [FLAGS] [OPTIONS] <file>
 
 FLAGS:
     -h, --help       Prints help information
@@ -35,7 +35,7 @@ ARGS:
 ```
 ### Output
 ```bash
-$ ./csv_utils ../tmp/file_of_data.csv -d'|'
+$ ./csvinfo ../tmp/file_of_data.csv -d'|'
 175646 records in file (| delim).
 Field  Max Len  (  %int    %float   %char  )       Title
 1      9        ( 99.9994   0.0000   0.0006)       PK_ID
