@@ -4,7 +4,7 @@ use std::process::Command;
 
 #[test]
 fn file_doesnt_exist() -> Result<(), Box<std::error::Error>> {
-    let mut cmd = Command::cargo_bin("csv_utils").unwrap();
+    let mut cmd = Command::cargo_bin("csvinfo").unwrap();
     cmd.arg("tests/data/404.csv");
 
     let assert = cmd.assert();
@@ -18,7 +18,7 @@ fn file_doesnt_exist() -> Result<(), Box<std::error::Error>> {
 
 #[test]
 fn simple_file() -> Result<(), Box<std::error::Error>> {
-    let mut cmd = Command::cargo_bin("csv_utils").unwrap();
+    let mut cmd = Command::cargo_bin("csvinfo").unwrap();
     cmd.arg("tests/data/simple.csv");
     cmd.assert().success();
     Ok(())
