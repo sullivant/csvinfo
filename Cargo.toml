@@ -1,5 +1,5 @@
 [package]
-name = "csv_utils"
+name = "csvinfo"
 version = "0.3.0"
 authors = ["Thomas Sullivan <thomas.l.sullivan@vumc.org>"]
 edition = "2018"
@@ -9,7 +9,7 @@ name = "csv_lib"
 path = "src/lib.rs"
 
 [[bin]]
-name = "csv_utils"
+name = "csvinfo"
 path = "src/main.rs"
 
 [dependencies]
