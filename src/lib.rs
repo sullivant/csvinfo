@@ -21,7 +21,7 @@ impl Field {
         // We only want to record if this value was ever empty or not.  So, if
         // it already has had a value, just move on. Otherwise, set the current
         // has_value value.  It's a "one way" switch.
-        if self.has_value == true {
+        if self.has_value {
             return;
         }
         self.has_value = v;

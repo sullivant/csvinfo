@@ -13,7 +13,7 @@ You should really probably be using XSV: https://github.com/BurntSushi/xsv but, 
 ### Usage
 ```bash
 $ ./csvinfo --help
-CSV Utils 0.2.0
+CSV Utils 0.4.0
 Thomas Sullivan <sullivan.t@gmail.com>
 Shows some info on CSV files.
 
@@ -37,12 +37,11 @@ ARGS:
 ```bash
 $ ./csvinfo ../tmp/file_of_data.csv -d'|'
 175646 records in file (| delim).
-Field  Max Len  (  %int    %float   %char  )       Title
-1      9        ( 99.9994   0.0000   0.0006)       PK_ID
-2      9        ( 99.9994   0.0000   0.0006)    EMPLOYEE
-3      9        ( 99.9994   0.0000   0.0006)    BADGE_ID
-4      9        ( 99.9989   0.0000   0.0011)    LOCATION
-5      10       (  0.0000   0.0000 100.0000)  START_DATE
+Field  Max Len  (  %int    %float   %char  ) Empty?      Title
+1      7        (  0.0000   0.0000 100.0000)              Name
+2      2        ( 66.6667   0.0000  33.3333)               Age
+3      7        (  0.0000 100.0000   0.0000)            Salary
+4      0        (  0.0000   0.0000 100.0000) empty   Part Time
 ```
 
 ### General TODO

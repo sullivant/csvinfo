@@ -19,7 +19,7 @@ fn main() {
 
 fn get_parameters<'a>() -> clap::ArgMatches<'a> {
     App::new("CSV Utils")
-        .version("0.3.0")
+        .version("0.4.0")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
         .arg(
@@ -131,7 +131,7 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
             };
 
             // Does this field actually have a value?
-            let has_val: bool = if check_val > 0 { true } else { false };
+            let has_val: bool = check_val > 0;
 
             // Match to see if we already have this field in record_data, if we do, determine if
             // the length found here is greater than the length we have already; if not, push new
@@ -204,14 +204,11 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
                 .with_cell(format!("{:8.4}", profile.0))
                 .with_cell(format!("{:8.4}", profile.1))
                 .with_cell(format!("{:8.4}", profile.2))
-                .with_cell(format!(
-                    "{}",
-                    if field.has_value == false {
-                        "empty".to_string()
-                    } else {
-                        "".to_string()
-                    }
-                ))
+                .with_cell(if !field.has_value {
+                    "empty".to_string()
+                } else {
+                    "".to_string()
+                })
                 .with_cell(&field.title),
         );
     }
