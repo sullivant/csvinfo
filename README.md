@@ -57,5 +57,5 @@ Field  Max Len  (  %int    %float   %char  ) Empty?      Title
 ###  Content of the fields
 - [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
 - [X] Which are always numeric?
-- [ ] Which have no empty vals?
+- [X] Which have empty vals?
 - [X] Trim extra spaces (eg: ```"Name", "Age","Location"```)
