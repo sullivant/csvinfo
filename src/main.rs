@@ -111,11 +111,12 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
 
     let headers = rdr.headers()?.clone();
 
+    // Iterate through each record in the file
     for result in rdr.records() {
         let record = result?;
         record_count += 1;
 
-        // Walk through each record, and start to gather the data into the vector of field data
+        // Iterate through each field, to gather the data into the vector of field data
         let mut i: i32 = 0;
         for field in record.iter() {
             let check_val: i32 = field.trim().len() as i32; // The val we will use to determine new max
@@ -129,11 +130,16 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
                 },
             };
 
+            // Does this field actually have a value?
+            let has_val: bool = if check_val > 0 { true } else { false };
+
             // Match to see if we already have this field in record_data, if we do, determine if
             // the length found here is greater than the length we have already; if not, push new
             // metadata onto record_data.
             match record_data.iter().position(|ref p| i <= p.pos) {
                 Some(_) => {
+                    // Determine if the current value's length is greater than the existing max_len
+                    // and, if so, make the current length the new normal.
                     let existing: i32 = record_data.get(i as usize).unwrap().max_len;
                     if check_val > existing {
                         record_data[i as usize].max_len = check_val;
@@ -143,13 +149,19 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
                     record_data[i as usize].types.0 += data_type.0;
                     record_data[i as usize].types.1 += data_type.1;
                     record_data[i as usize].types.2 += data_type.2;
+
+                    // Update the "has value" flag
+                    record_data[i as usize].has_value(has_val);
                 }
                 None => {
+                    // We have not yet seen this field, so lets just make a new one with the
+                    // values we currently have
                     record_data.push(Field {
                         pos: i,
                         max_len: check_val,
                         title: headers.get(i as usize).unwrap_or("unk").trim().to_string(),
                         types: data_type,
+                        has_value: has_val,
                     });
                 }
             }
@@ -169,7 +181,7 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
     )
     .unwrap();
 
-    let mut table = Table::new("{:<}  {:<}  ({:^} {:^} {:^})  {:>}");
+    let mut table = Table::new("{:<}  {:<}  ({:^} {:^} {:^}) {:^}  {:>}");
 
     table.add_row(
         Row::new()
@@ -178,6 +190,7 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
             .with_cell("%int")
             .with_cell("%float")
             .with_cell("%char")
+            .with_cell("Empty?")
             .with_cell("Title"),
     );
     for field in record_data.iter() {
@@ -191,6 +204,14 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
                 .with_cell(format!("{:8.4}", profile.0))
                 .with_cell(format!("{:8.4}", profile.1))
                 .with_cell(format!("{:8.4}", profile.2))
+                .with_cell(format!(
+                    "{}",
+                    if field.has_value == false {
+                        "empty".to_string()
+                    } else {
+                        "".to_string()
+                    }
+                ))
                 .with_cell(&field.title),
         );
     }

@@ -56,3 +56,15 @@ fn mixed_file() -> Result<(), Box<std::error::Error>> {
 
     Ok(())
 }
+
+#[test]
+fn test_empty_field() -> Result<(), Box<std::error::Error>> {
+    let mut cmd = Command::cargo_bin("csvinfo").unwrap();
+    cmd.arg("tests/data/empty.csv");
+    cmd.arg("-s"); // You need to skip headers on an empty test, else the header is considered
+
+    let predicate_fn = predicate::str::contains("empty   Part Time");
+    cmd.assert().success().stdout(predicate_fn);
+
+    Ok(())
+}

@@ -4,6 +4,7 @@ pub struct Field {
     pub max_len: i32,
     pub title: String,
     pub types: (i32, i32, i32), // int, float, char
+    pub has_value: bool,        // contains a count of records that are not empty
 }
 impl Field {
     // Returns a profile tuple in % based on the types tuple in Field
@@ -15,6 +16,15 @@ impl Field {
             (f64::from(self.types.2) / sum) * 100.0,
         );
         t
+    }
+    pub fn has_value(&mut self, v: bool) {
+        // We only want to record if this value was ever empty or not.  So, if
+        // it already has had a value, just move on. Otherwise, set the current
+        // has_value value.  It's a "one way" switch.
+        if self.has_value == true {
+            return;
+        }
+        self.has_value = v;
     }
 }
 
@@ -30,6 +40,7 @@ mod tests {
             max_len: 1,
             title: String::from("Test Field"),
             types: (1, 0, 0),
+            has_value: false,
         };
         assert_eq!(f.build_profile(), (100.0, 0.0, 0.0));
 
@@ -39,8 +50,26 @@ mod tests {
             max_len: 1,
             title: String::from("Test Field"),
             types: (1, 1, 2),
+            has_value: false,
         };
         assert_eq!(f.build_profile(), (25.0, 25.0, 50.0));
+    }
+
+    #[test]
+    fn test_has_value() {
+        let mut f: Field = Field {
+            pos: 1,
+            max_len: 1,
+            title: String::from("Test Field"),
+            types: (1, 0, 0),
+            has_value: false,
+        };
+
+        assert_eq!(false, f.has_value);
+
+        // Set it to true
+        f.has_value(true);
+        assert_eq!(true, f.has_value);
     }
 
 }
