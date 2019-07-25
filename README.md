@@ -52,6 +52,7 @@ Field  Max Len  (  %int    %float   %char  )       Title
 - [X] Allow for field names to be gathered from header data instead of "field 1, field 2..."
 - [ ] Test cases
 - [ ] Decide if we want to allow for mixed quoted values (some quoted, some not)
+- [ ] Process escaped delimiters
 - [X] Prettier looking CLI output
 - [ ] Status bar on CLI while waiting/processing
 ###  Content of the fields
