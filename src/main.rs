@@ -1,3 +1,9 @@
+// csvinfo
+//
+// A small util to profile delimited files
+//
+// Author: Thomas Sullivan (sullivan.t@gmail.com)
+//
 #[macro_use]
 extern crate clap;
 extern crate csv;
