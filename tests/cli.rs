@@ -68,3 +68,15 @@ fn test_empty_field() -> Result<(), Box<std::error::Error>> {
 
     Ok(())
 }
+
+#[test]
+fn test_max_length() -> Result<(), Box<std::error::Error>> {
+    let mut cmd = Command::cargo_bin("csvinfo").unwrap();
+    cmd.arg("tests/data/max.csv");
+    cmd.arg("-m10");
+
+    let predicate_fn = predicate::str::contains("10 records in file (, delim).");
+    cmd.assert().success().stdout(predicate_fn);
+
+    Ok(())
+}
