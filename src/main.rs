@@ -25,7 +25,7 @@ fn main() {
 
 fn get_parameters<'a>() -> clap::ArgMatches<'a> {
     App::new("CSV Utils")
-        .version("0.4.0")
+        .version("0.4.1")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
         .arg(
@@ -50,7 +50,7 @@ fn get_parameters<'a>() -> clap::ArgMatches<'a> {
                 .help("When used, skips the first record (header)"),
         )
         .arg(
-            Arg::with_name("max_records")
+            Arg::with_name("max")
                 .long("max")
                 .short("m")
                 .help("When provided, will stop gathering data after N records")
@@ -175,7 +175,6 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
             i += 1;
         }
         if stop_after && record_count == stop_count {
-            writeln!(writer, "Hit record stop count.").unwrap();
             break;
         }
     }
