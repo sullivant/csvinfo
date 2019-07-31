@@ -25,7 +25,7 @@ fn main() {
 
 fn get_parameters<'a>() -> clap::ArgMatches<'a> {
     App::new("CSV Utils")
-        .version("0.4.1")
+        .version("0.4.2")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
         .arg(
