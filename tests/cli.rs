@@ -80,3 +80,15 @@ fn test_max_length() -> Result<(), Box<std::error::Error>> {
 
     Ok(())
 }
+
+#[test]
+fn test_unicode() -> Result<(), Box<std::error::Error>> {
+    let mut cmd = Command::cargo_bin("csvinfo").unwrap();
+    cmd.arg("tests/data/unicode.csv");
+    cmd.arg("-q");
+
+    let predicate_fn = predicate::str::contains("4 records in file (, delim).");
+    cmd.assert().success().stdout(predicate_fn);
+
+    Ok(())
+}
