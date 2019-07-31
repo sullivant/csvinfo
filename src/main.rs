@@ -11,7 +11,7 @@ extern crate tabular;
 
 use clap::{App, Arg};
 use std::error::Error;
-use std::process;
+use std::{process, str};
 use tabular::{Row, Table};
 
 use csv_lib::Field;
@@ -118,22 +118,25 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
     let headers = rdr.headers()?.clone();
 
     // Iterate through each record in the file
-    for result in rdr.records() {
+    for result in rdr.byte_records() {
         let record = result?;
         record_count += 1;
 
         // Iterate through each field, to gather the data into the vector of field data
         let mut i: i32 = 0;
         for field in record.iter() {
-            let check_val: i32 = field.trim().len() as i32; // The val we will use to determine new max
+            let check_val: i32 = field.len() as i32; // The val we will use to determine new max
 
             // determine if this is an integer, or a float, or a char
-            let data_type = match field.trim().parse::<i32>() {
-                Ok(_) => (1, 0, 0),
-                Err(_) => match field.trim().parse::<f32>() {
-                    Ok(_) => (0, 1, 0),
-                    Err(_) => (0, 0, 1),
+            let data_type = match str::from_utf8(field) {
+                Ok(v) => match v.parse::<i32>() {
+                    Ok(_) => (1, 0, 0),
+                    Err(_) => match v.parse::<f32>() {
+                        Ok(_) => (0, 1, 0),
+                        Err(_) => (0, 0, 1),
+                    },
                 },
+                Err(_) => (0, 0, 1),
             };
 
             // Does this field actually have a value?
