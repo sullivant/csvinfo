@@ -10,10 +10,18 @@ This is just here while I tinker with some "applied" learning of Rust - don't tr
 
 You should really probably be using XSV: https://github.com/BurntSushi/xsv but, I am taking examples in idea from there and implementing them here because, again, this is a "hands on" place for me to do some learnin'.
 
+### Installation
+```
+1. git clone git@github.com:sullivant/csvinfo.git
+2. cd csvinfo
+3. cargo build --release
+4. cp ./target/release/csvinfo ~/bin (or somewhere in your path)
+```
+
 ### Usage
 ```bash
 $ ./csvinfo --help
-CSV Utils 0.4.0
+CSV Utils 0.4.3
 Thomas Sullivan <sullivan.t@gmail.com>
 Shows some info on CSV files.
 
@@ -37,25 +45,22 @@ ARGS:
 ```bash
 $ ./csvinfo ../tmp/file_of_data.csv -d'|'
 175646 records in file (| delim).
-Field  Max Len  (  %int    %float   %char  ) Empty?      Title
-1      7        (  0.0000   0.0000 100.0000)              Name
-2      2        ( 66.6667   0.0000  33.3333)               Age
-3      7        (  0.0000 100.0000   0.0000)            Salary
-4      0        (  0.0000   0.0000 100.0000) empty   Part Time
+Field  Max Len  ( %int  %float %char  ) Empty?  Title
+1      5        (  0.00   0.00 100.00 )          Type
+2      6        ( 25.00  25.00  50.00 )         Value
 ```
 
-### General TODO
+### General Roadmap
 - [X] Use the crate "clap" as a way to pass CLI parameters
 - [X] Allow for any single char passed as parameter
 - [X] Allow for quoted values
 - [X] Allow for field names to be gathered from header data instead of "field 1, field 2..."
-- [ ] Test cases
-- [ ] Decide if we want to allow for mixed quoted values (some quoted, some not)
-- [ ] Process escaped delimiters
+- [X] Test cases
 - [X] Prettier looking CLI output
-- [ ] Status bar on CLI while waiting/processing
-###  Content of the fields
-- [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
 - [X] Which are always numeric?
 - [X] Which have empty vals?
 - [X] Trim extra spaces (eg: ```"Name", "Age","Location"```)
+- [ ] Decide if we want to allow for mixed quoted values (some quoted, some not)
+- [ ] Process escaped delimiters
+- [ ] Status bar on CLI while waiting/processing
+- [ ] Add more "metadata" to the output; instead of all the fields, maybe bucket them into sizes? ( wide files look odd in the results )
