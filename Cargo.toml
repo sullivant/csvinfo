@@ -1,6 +1,6 @@
 [package]
 name = "csvinfo"
-version = "0.4.2"
+version = "0.4.3"
 authors = ["Thomas Sullivan <thomas.l.sullivan@vumc.org>"]
 edition = "2018"
 

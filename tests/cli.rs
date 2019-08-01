@@ -92,3 +92,15 @@ fn test_unicode() -> Result<(), Box<std::error::Error>> {
 
     Ok(())
 }
+
+#[test]
+fn test_data_types() -> Result<(), Box<std::error::Error>> {
+    let mut cmd = Command::cargo_bin("csvinfo").unwrap();
+    cmd.arg("tests/data/data_types.csv");
+
+    let predicate_fn =
+        predicate::str::contains("2      6        ( 25.00  25.00  50.00 )         Value");
+    cmd.assert().success().stdout(predicate_fn);
+
+    Ok(())
+}

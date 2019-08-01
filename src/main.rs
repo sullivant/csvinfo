@@ -25,7 +25,7 @@ fn main() {
 
 fn get_parameters<'a>() -> clap::ArgMatches<'a> {
     App::new("CSV Utils")
-        .version("0.4.2")
+        .version("0.4.3")
         .author("Thomas Sullivan <sullivan.t@gmail.com>")
         .about("Shows some info on CSV files.")
         .arg(
@@ -189,7 +189,7 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
     )
     .unwrap();
 
-    let mut table = Table::new("{:<}  {:<}  ({:^} {:^} {:^}) {:^}  {:>}");
+    let mut table = Table::new("{:<}  {:<}  ({:^} {:^} {:^} ) {:^}  {:>}");
 
     table.add_row(
         Row::new()
@@ -209,9 +209,9 @@ fn run(mut writer: impl std::io::Write) -> Result<(), Box<Error>> {
             Row::new()
                 .with_cell(field.pos + 1)
                 .with_cell(field.max_len)
-                .with_cell(format!("{:8.4}", profile.0))
-                .with_cell(format!("{:8.4}", profile.1))
-                .with_cell(format!("{:8.4}", profile.2))
+                .with_cell(format!("{:6.2}", profile.0))
+                .with_cell(format!("{:6.2}", profile.1))
+                .with_cell(format!("{:6.2}", profile.2))
                 .with_cell(if !field.has_value {
                     "empty".to_string()
                 } else {
