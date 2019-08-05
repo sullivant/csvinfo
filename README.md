@@ -60,6 +60,7 @@ Field  Max Len  ( %int  %float %char  ) Empty?  Title
 - [X] Which are always numeric?
 - [X] Which have empty vals?
 - [X] Trim extra spaces (eg: ```"Name", "Age","Location"```)
+- [ ] Files without headers - autogen names instead of using first vals
 - [ ] Decide if we want to allow for mixed quoted values (some quoted, some not)
 - [ ] Process escaped delimiters
 - [ ] Status bar on CLI while waiting/processing
